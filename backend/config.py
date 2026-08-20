@@ -54,7 +54,10 @@ class AppConfig(BaseModel):
     
     # Admin credentials
     admin_username: str = Field(default="admin", description="Admin username")
-    admin_password: str = Field(default="admin", description="Admin password (should be hashed)")
+    admin_password: Optional[str] = Field(
+        default=None,
+        description="Admin bootstrap password; no admin is seeded when unset",
+    )
 
     # External search fallback
     fallback_enabled: bool = Field(default=True, description="Enable external search fallback")
@@ -74,7 +77,7 @@ class AppConfig(BaseModel):
             jwt_algorithm=os.getenv("JWT_ALGORITHM", "HS256"),
             jwt_expiration_hours=int(os.getenv("JWT_EXPIRATION_HOURS", "24")),
             admin_username=os.getenv("ADMIN_USERNAME", "admin"),
-            admin_password=os.getenv("ADMIN_PASSWORD", "admin"),
+            admin_password=os.getenv("ADMIN_PASSWORD") or None,
             fallback_enabled=os.getenv("FALLBACK_ENABLED", "true").lower() == "true",
             rag=RAGConfig(
                 top_k=int(os.getenv("RAG_TOP_K", "5")),

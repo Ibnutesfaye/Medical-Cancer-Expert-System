@@ -84,7 +84,7 @@ async def lifespan(app: FastAPI):
 
     # 2. Seed default admin user if not exists
     with Session(engine) as db:
-        if not get_user_by_username(db, config.admin_username):
+        if config.admin_password and not get_user_by_username(db, config.admin_username):
             create_user(db, UserCreate(
                 username=config.admin_username,
                 password=config.admin_password,
@@ -92,6 +92,8 @@ async def lifespan(app: FastAPI):
                 full_name="System Admin",
             ))
             print(f"SUCCESS: Admin user '{config.admin_username}' seeded")
+        elif not config.admin_password:
+            print("INFO: ADMIN_PASSWORD is unset; default admin seeding skipped")
 
     # 3. Build image dataset index in background
     def _build_index():

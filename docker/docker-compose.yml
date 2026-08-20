@@ -23,9 +23,9 @@ services:
     environment:
       - GROQ_API_KEY=${GROQ_API_KEY}
       - DATABASE_URL=${DATABASE_URL:-sqlite:///./medical_chatbot.db}
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-me-in-production}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:?Set JWT_SECRET_KEY in your environment}
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
       - RAG_MODEL_NAME=llama-3.3-70b-versatile
       - FALLBACK_ENABLED=true
     volumes:
@@ -58,7 +58,7 @@ services:
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in your environment}
       MYSQL_DATABASE: medical_cancer_expert
     volumes:
       - mysql_data:/var/lib/mysql
@@ -98,7 +98,7 @@ services:
       - grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:?Set GRAFANA_PASSWORD in your environment}
       - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
       - prometheus

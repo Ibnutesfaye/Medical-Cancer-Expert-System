@@ -1,5 +1,8 @@
 name: Medical Cancer Expert System — CI/CD
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main, develop]
@@ -14,18 +17,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
           cache: 'pip'
+          cache-dependency-path: backend/requirements-ci.txt
 
       - name: Install dependencies
         run: |
-          pip install -r backend/requirements.txt
-          pip install pytest pytest-timeout pytest-asyncio
+          python -m pip install --upgrade pip
+          python -m pip install -r backend/requirements-ci.txt
 
       - name: Run unit tests
         run: |
@@ -72,10 +76,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'
@@ -88,7 +92,7 @@ jobs:
         run: cd frontend && npm run build
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: frontend-dist
           path: frontend/dist/
@@ -103,13 +107,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Build backend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/Dockerfile.backend
@@ -119,7 +123,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build frontend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/Dockerfile.frontend
@@ -136,17 +140,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 
       - name: Run Bandit security scan
         run: |
-          pip install bandit
+          python -m pip install bandit==1.8.6
+          # B301/B614 are expected for repository-controlled persisted FAISS/sklearn
+          # data and the committed PyTorch model. Continue scanning all other issues.
           bandit -r backend/ \
             --exclude backend/venv,backend/brain\ cancer\ csv,backend/lung\ cancer\ csv,backend/skin\ cancer\ csv \
-            -ll -q || true
-        continue-on-error: true
+            --skip B301,B614 \
+            -ll -q

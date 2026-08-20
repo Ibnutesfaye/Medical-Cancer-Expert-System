@@ -18,10 +18,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
 
 def seed():
+    if not ADMIN_PASSWORD:
+        raise RuntimeError("ADMIN_PASSWORD must be set before seeding the admin user")
+
     print("Creating tables...")
     create_tables()
     print("Tables created.")

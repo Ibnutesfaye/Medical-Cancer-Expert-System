@@ -860,14 +860,14 @@ The server automatically loads the new model on next startup.
 bash
 
 ## cd backend
-venv\Scripts\python.exe main.py
 
+venv\Scripts\python.exe main.py
 
 cd "c:\Medical Cancer Expert System\backend"
 
-### cd backend  evaluate
-venv\Scripts\python.exe evaluate_model.py
+### cd backend evaluate
 
+venv\Scripts\python.exe evaluate_model.py
 
 You should see:
 INFO: Uvicorn running on http://0.0.0.0:8000
@@ -885,19 +885,18 @@ You should see:
 VITE ready in Xms
 ➜ Local: http://localhost:3000/
 
-
 ---
 
-## Model Evaluation — Confusion Matrix & Classification Metrics
+## Model Evaluation — Confusion Matrix & Classification Metric
 
 ### Definitions
 
-| Term | Symbol | Meaning |
-|---|---|---|
-| True Positive | TP | Cancer image correctly predicted as Cancer |
-| False Positive | FP | Healthy image wrongly predicted as Cancer (false alarm) |
-| False Negative | FN | Cancer image wrongly predicted as Non-cancer (**most dangerous**) |
-| True Negative | TN | Healthy image correctly predicted as Non-cancer |
+| Term           | Symbol | Meaning                                                           |
+| -------------- | ------ | ----------------------------------------------------------------- |
+| True Positive  | TP     | Cancer image correctly predicted as Cancer                        |
+| False Positive | FP     | Healthy image wrongly predicted as Cancer (false alarm)           |
+| False Negative | FN     | Cancer image wrongly predicted as Non-cancer (**most dangerous**) |
+| True Negative  | TN     | Healthy image correctly predicted as Non-cancer                   |
 
 > **Positive class = Cancer**
 > **Negative class = Non-cancer**
@@ -936,10 +935,10 @@ Actual: Non-cancer  → Predicted: Non-cancer   (TN) × 192
 
 ### Step 1 — Confusion Matrix Values
 
-| | Predicted: Cancer | Predicted: Non-cancer |
-|---|---|---|
-| **Actual: Cancer** | TP = 182 | FN = 28 |
-| **Actual: Non-cancer** | FP = 18 | TN = 192 |
+|                        | Predicted: Cancer | Predicted: Non-cancer |
+| ---------------------- | ----------------- | --------------------- |
+| **Actual: Cancer**     | TP = 182          | FN = 28               |
+| **Actual: Non-cancer** | FP = 18           | TN = 192              |
 
 ---
 
@@ -962,6 +961,7 @@ ACTUAL Cancer │  TP=182  │   FN=28     │  Total Actual Cancer = 210
 ### Step 3 — Metric Calculations
 
 #### Accuracy
+
 ```
 Accuracy = (TP + TN) / (TP + TN + FP + FN)
          = (182 + 192) / (182 + 192 + 18 + 28)
@@ -970,6 +970,7 @@ Accuracy = (TP + TN) / (TP + TN + FP + FN)
 ```
 
 #### Precision (Cancer class)
+
 ```
 Precision = TP / (TP + FP)
           = 182 / (182 + 18)
@@ -978,6 +979,7 @@ Precision = TP / (TP + FP)
 ```
 
 #### Recall / Sensitivity (Cancer class)
+
 ```
 Recall = TP / (TP + FN)
        = 182 / (182 + 28)
@@ -986,6 +988,7 @@ Recall = TP / (TP + FN)
 ```
 
 #### F1 Score
+
 ```
 F1 = 2 × (Precision × Recall) / (Precision + Recall)
    = 2 × (0.910 × 0.867) / (0.910 + 0.867)
@@ -997,15 +1000,15 @@ F1 = 2 × (Precision × Recall) / (Precision + Recall)
 
 ### Step 4 — Metrics Summary Table
 
-| Metric | Value | Interpretation |
-|---|---|---|
-| Accuracy | **89.0%** | 89 out of 100 predictions are correct |
-| Precision | **91.0%** | When model says "cancer", it is right 91% of the time |
-| Recall (Sensitivity) | **86.7%** | Model catches 86.7% of all actual cancer cases |
-| F1 Score | **88.8%** | Balanced score between precision and recall |
-| False Negative Rate | **13.3%** | 13.3% of cancers are missed — the key risk metric |
-| False Positive Rate | **8.6%** | 8.6% of healthy cases are flagged as cancer |
-| Specificity | **91.4%** | Model correctly identifies 91.4% of healthy cases |
+| Metric               | Value     | Interpretation                                        |
+| -------------------- | --------- | ----------------------------------------------------- |
+| Accuracy             | **89.0%** | 89 out of 100 predictions are correct                 |
+| Precision            | **91.0%** | When model says "cancer", it is right 91% of the time |
+| Recall (Sensitivity) | **86.7%** | Model catches 86.7% of all actual cancer cases        |
+| F1 Score             | **88.8%** | Balanced score between precision and recall           |
+| False Negative Rate  | **13.3%** | 13.3% of cancers are missed — the key risk metric     |
+| False Positive Rate  | **8.6%**  | 8.6% of healthy cases are flagged as cancer           |
+| Specificity          | **91.4%** | Model correctly identifies 91.4% of healthy cases     |
 
 ---
 
@@ -1067,14 +1070,14 @@ Our model: Recall = 86.7%, Precision = 91.0% — a good balance for research use
 
 ### How to Improve Recall (Reduce False Negatives)
 
-| Technique | Effect |
-|---|---|
-| Weighted loss function — penalize FN more | Directly reduces missed cancers |
+| Technique                                            | Effect                                      |
+| ---------------------------------------------------- | ------------------------------------------- |
+| Weighted loss function — penalize FN more            | Directly reduces missed cancers             |
 | Lower confidence threshold (e.g. 40% instead of 50%) | Catches more cancers, increases FP slightly |
-| More training data per class | Better generalization |
-| Longer training (30–40 epochs) | More learned features |
-| Data augmentation (elastic distortion, zoom) | More robust to image variation |
-| Ensemble multiple models | Reduces individual model errors |
+| More training data per class                         | Better generalization                       |
+| Longer training (30–40 epochs)                       | More learned features                       |
+| Data augmentation (elastic distortion, zoom)         | More robust to image variation              |
+| Ensemble multiple models                             | Reduces individual model errors             |
 
 ---
 
@@ -1087,18 +1090,17 @@ Because FN is the most dangerous error, this system applies two safety layers be
 
 Both layers prioritize **safety over answering** — it is better to say "I don't know" than to give a wrong cancer result.
 
-
 ---
 
 ## Brain Cancer Dataset — Exact File Count & Evaluation
 
 ### Actual File Count (Counted from Disk)
 
-| Split | Glioma | Meningioma | No Tumor | Pituitary | **Total** |
-|---|---|---|---|---|---|
-| Training | 1,400 | 1,400 | 1,400 | 1,400 | **5,600** |
-| Testing | 400 | 400 | 400 | 400 | **1,600** |
-| **Total** | **1,800** | **1,800** | **1,800** | **1,800** | **7,200** |
+| Split     | Glioma    | Meningioma | No Tumor  | Pituitary | **Total** |
+| --------- | --------- | ---------- | --------- | --------- | --------- |
+| Training  | 1,400     | 1,400      | 1,400     | 1,400     | **5,600** |
+| Testing   | 400       | 400        | 400       | 400       | **1,600** |
+| **Total** | **1,800** | **1,800**  | **1,800** | **1,800** | **7,200** |
 
 - 4 classes, perfectly balanced (same count per class in both splits)
 - Training / Testing ratio: **77.8% / 22.2%**
@@ -1156,6 +1158,7 @@ ACTUAL Cancer │  TP=1,056 │   FN=144     │  Total = 1,200
 ### Step-by-Step Metric Calculations
 
 #### Accuracy
+
 ```
 Accuracy = (TP + TN) / (TP + TN + FP + FN)
          = (1,056 + 364) / (1,056 + 364 + 36 + 144)
@@ -1164,6 +1167,7 @@ Accuracy = (TP + TN) / (TP + TN + FP + FN)
 ```
 
 #### Precision (Cancer class)
+
 ```
 Precision = TP / (TP + FP)
           = 1,056 / (1,056 + 36)
@@ -1172,6 +1176,7 @@ Precision = TP / (TP + FP)
 ```
 
 #### Recall / Sensitivity (Cancer class)
+
 ```
 Recall = TP / (TP + FN)
        = 1,056 / (1,056 + 144)
@@ -1180,6 +1185,7 @@ Recall = TP / (TP + FN)
 ```
 
 #### Specificity (Non-cancer class)
+
 ```
 Specificity = TN / (TN + FP)
             = 364 / (364 + 36)
@@ -1188,6 +1194,7 @@ Specificity = TN / (TN + FP)
 ```
 
 #### F1 Score
+
 ```
 F1 = 2 × (Precision × Recall) / (Precision + Recall)
    = 2 × (0.9670 × 0.8800) / (0.9670 + 0.8800)
@@ -1197,6 +1204,7 @@ F1 = 2 × (Precision × Recall) / (Precision + Recall)
 ```
 
 #### False Negative Rate (Miss Rate)
+
 ```
 FNR = FN / (TP + FN)
     = 144 / 1,200
@@ -1205,6 +1213,7 @@ FNR = FN / (TP + FN)
 ```
 
 #### False Positive Rate
+
 ```
 FPR = FP / (FP + TN)
     = 36 / 400
@@ -1216,30 +1225,34 @@ FPR = FP / (FP + TN)
 
 ### Metrics Summary Table
 
-| Metric | Formula | Value | Rating |
-|---|---|---|---|
-| Accuracy | (TP+TN) / Total | **88.75%** | ✅ Good |
-| Precision | TP / (TP+FP) | **96.70%** | ✅ Excellent |
-| Recall (Sensitivity) | TP / (TP+FN) | **88.00%** | ⚠️ Acceptable |
-| Specificity | TN / (TN+FP) | **91.00%** | ✅ Good |
-| F1 Score | 2×P×R / (P+R) | **92.15%** | ✅ Good |
-| False Negative Rate | FN / (TP+FN) | **12.00%** | ⚠️ Risk |
-| False Positive Rate | FP / (FP+TN) | **9.00%** | ✅ Low |
+| Metric               | Formula         | Value      | Rating        |
+| -------------------- | --------------- | ---------- | ------------- |
+| Accuracy             | (TP+TN) / Total | **88.75%** | ✅ Good       |
+| Precision            | TP / (TP+FP)    | **96.70%** | ✅ Excellent  |
+| Recall (Sensitivity) | TP / (TP+FN)    | **88.00%** | ⚠️ Acceptable |
+| Specificity          | TN / (TN+FP)    | **91.00%** | ✅ Good       |
+| F1 Score             | 2×P×R / (P+R)   | **92.15%** | ✅ Good       |
+| False Negative Rate  | FN / (TP+FN)    | **12.00%** | ⚠️ Risk       |
+| False Positive Rate  | FP / (FP+TN)    | **9.00%**  | ✅ Low        |
 
 ---
 
 ### Medical Interpretation
 
 #### Precision = 96.70%
+
 When the model says "this is a brain tumor", it is correct **96.7% of the time**. Very few false alarms — patients flagged by the model almost certainly have a tumor.
 
 #### Recall = 88.00%
+
 The model catches **88 out of every 100 brain cancer cases**. This means **12 out of 100 cancer patients are missed** (told they are healthy when they are not). This is the critical risk.
 
 #### F1 = 92.15%
+
 The harmonic mean of precision and recall. A score above 90% indicates the model has a strong balance between catching cancers and avoiding false alarms.
 
 #### False Negative Rate = 12%
+
 **144 cancer cases out of 1,200 were missed.** In a real hospital setting, these patients would leave without treatment. This is why the system must never be used as a standalone diagnostic tool.
 
 ---
@@ -1278,14 +1291,13 @@ The harmonic mean of precision and recall. A score above 90% indicates the model
 
 ### Per-Class Breakdown (Brain Cancer Test Set)
 
-| Class | Test Images | Label | Expected Correct (~88%) | Expected Missed |
-|---|---|---|---|---|
-| Glioma | 400 | Cancer | ~352 | ~48 |
-| Meningioma | 400 | Cancer | ~352 | ~48 |
-| Pituitary | 400 | Cancer | ~352 | ~48 |
-| No Tumor | 400 | Non-cancer | ~364 | ~36 (false alarms) |
-| **Total** | **1,600** | | **~1,420** | **~180** |
-
+| Class      | Test Images | Label      | Expected Correct (~88%) | Expected Missed    |
+| ---------- | ----------- | ---------- | ----------------------- | ------------------ |
+| Glioma     | 400         | Cancer     | ~352                    | ~48                |
+| Meningioma | 400         | Cancer     | ~352                    | ~48                |
+| Pituitary  | 400         | Cancer     | ~352                    | ~48                |
+| No Tumor   | 400         | Non-cancer | ~364                    | ~36 (false alarms) |
+| **Total**  | **1,600**   |            | **~1,420**              | **~180**           |
 
 ---
 
@@ -1295,12 +1307,12 @@ The harmonic mean of precision and recall. A score above 90% indicates the model
 
 The lung cancer dataset uses the **IQ-OTH/NCCD dataset** — CT scan images organized into 3 classes.
 
-| Class | Label | Image Count |
-|---|---|---|
-| Malignant cases | cancer | **561** |
-| Normal cases | non-cancer | **416** |
-| Benign cases | non-cancer | **120** |
-| **Total** | | **1,097** |
+| Class           | Label      | Image Count |
+| --------------- | ---------- | ----------- |
+| Malignant cases | cancer     | **561**     |
+| Normal cases    | non-cancer | **416**     |
+| Benign cases    | non-cancer | **120**     |
+| **Total**       |            | **1,097**   |
 
 > Note: The `Test cases` folder contains **197 additional unlabelled CT images** used for inference testing only — not included in training metrics.
 
@@ -1360,6 +1372,7 @@ ACTUAL Cancer │   TP=47   │    FN=9      │  Total = 56
 ### Step-by-Step Metric Calculations — Lung Cancer
 
 #### Accuracy
+
 ```
 Accuracy = (TP + TN) / (TP + TN + FP + FN)
          = (47 + 48) / (47 + 48 + 6 + 9)
@@ -1368,6 +1381,7 @@ Accuracy = (TP + TN) / (TP + TN + FP + FN)
 ```
 
 #### Precision
+
 ```
 Precision = TP / (TP + FP)
           = 47 / (47 + 6)
@@ -1376,6 +1390,7 @@ Precision = TP / (TP + FP)
 ```
 
 #### Recall
+
 ```
 Recall = TP / (TP + FN)
        = 47 / (47 + 9)
@@ -1384,6 +1399,7 @@ Recall = TP / (TP + FN)
 ```
 
 #### Specificity
+
 ```
 Specificity = TN / (TN + FP)
             = 48 / (48 + 6)
@@ -1392,6 +1408,7 @@ Specificity = TN / (TN + FP)
 ```
 
 #### F1 Score
+
 ```
 F1 = 2 × (Precision × Recall) / (Precision + Recall)
    = 2 × (0.8868 × 0.8393) / (0.8868 + 0.8393)
@@ -1401,6 +1418,7 @@ F1 = 2 × (Precision × Recall) / (Precision + Recall)
 ```
 
 #### False Negative Rate
+
 ```
 FNR = FN / (TP + FN) = 9 / 56 = 0.1607  →  16.07%
 → 16 out of every 100 lung cancer cases are missed
@@ -1410,15 +1428,15 @@ FNR = FN / (TP + FN) = 9 / 56 = 0.1607  →  16.07%
 
 ### Metrics Summary — Lung Cancer
 
-| Metric | Value | Rating |
-|---|---|---|
-| Accuracy | **86.36%** | ✅ Good |
-| Precision | **88.68%** | ✅ Good |
+| Metric               | Value      | Rating      |
+| -------------------- | ---------- | ----------- |
+| Accuracy             | **86.36%** | ✅ Good     |
+| Precision            | **88.68%** | ✅ Good     |
 | Recall (Sensitivity) | **83.93%** | ⚠️ Moderate |
-| Specificity | **88.89%** | ✅ Good |
-| F1 Score | **86.22%** | ✅ Good |
-| False Negative Rate | **16.07%** | ⚠️ Risk |
-| False Positive Rate | **11.11%** | ⚠️ Moderate |
+| Specificity          | **88.89%** | ✅ Good     |
+| F1 Score             | **86.22%** | ✅ Good     |
+| False Negative Rate  | **16.07%** | ⚠️ Risk     |
+| False Positive Rate  | **11.11%** | ⚠️ Moderate |
 
 ---
 
@@ -1457,18 +1475,19 @@ FNR = FN / (TP + FN) = 9 / 56 = 0.1607  →  16.07%
 
 The skin cancer dataset uses the **HAM10000 dataset** — dermoscopy images across 7 classes.
 
-| Class | Full Name | Label | Image Count |
-|---|---|---|---|
-| nv | Melanocytic Nevi | non-cancer | **6,705** |
-| mel | Melanoma | cancer | **1,113** |
-| bkl | Benign Keratosis | non-cancer | **1,099** |
-| bcc | Basal Cell Carcinoma | cancer | **514** |
-| akiec | Actinic Keratosis | cancer | **327** |
-| vasc | Vascular Lesion | non-cancer | **142** |
-| df | Dermatofibroma | non-cancer | **115** |
-| **Total** | | | **10,015** |
+| Class     | Full Name            | Label      | Image Count |
+| --------- | -------------------- | ---------- | ----------- |
+| nv        | Melanocytic Nevi     | non-cancer | **6,705**   |
+| mel       | Melanoma             | cancer     | **1,113**   |
+| bkl       | Benign Keratosis     | non-cancer | **1,099**   |
+| bcc       | Basal Cell Carcinoma | cancer     | **514**     |
+| akiec     | Actinic Keratosis    | cancer     | **327**     |
+| vasc      | Vascular Lesion      | non-cancer | **142**     |
+| df        | Dermatofibroma       | non-cancer | **115**     |
+| **Total** |                      |            | **10,015**  |
 
 **Images on disk:**
+
 - HAM10000_images_part_1: **5,000 images**
 - HAM10000_images_part_2: **5,015 images**
 - **Total: 10,015 images**
@@ -1538,6 +1557,7 @@ ACTUAL Cancer │  TP=163   │   FN=32      │  Total =   195
 ### Step-by-Step Metric Calculations — Skin Cancer
 
 #### Accuracy
+
 ```
 Accuracy = (TP + TN) / (TP + TN + FP + FN)
          = (163 + 734) / (163 + 734 + 73 + 32)
@@ -1546,6 +1566,7 @@ Accuracy = (TP + TN) / (TP + TN + FP + FN)
 ```
 
 #### Precision
+
 ```
 Precision = TP / (TP + FP)
           = 163 / (163 + 73)
@@ -1554,6 +1575,7 @@ Precision = TP / (TP + FP)
 ```
 
 #### Recall
+
 ```
 Recall = TP / (TP + FN)
        = 163 / (163 + 32)
@@ -1562,6 +1584,7 @@ Recall = TP / (TP + FN)
 ```
 
 #### Specificity
+
 ```
 Specificity = TN / (TN + FP)
             = 734 / (734 + 73)
@@ -1570,6 +1593,7 @@ Specificity = TN / (TN + FP)
 ```
 
 #### F1 Score
+
 ```
 F1 = 2 × (Precision × Recall) / (Precision + Recall)
    = 2 × (0.6907 × 0.8359) / (0.6907 + 0.8359)
@@ -1579,12 +1603,14 @@ F1 = 2 × (Precision × Recall) / (Precision + Recall)
 ```
 
 #### False Negative Rate
+
 ```
 FNR = FN / (TP + FN) = 32 / 195 = 0.1641  →  16.41%
 → 16 out of every 100 skin cancer cases are missed
 ```
 
 #### False Positive Rate
+
 ```
 FPR = FP / (FP + TN) = 73 / 807 = 0.0905  →  9.05%
 → 9 out of every 100 healthy skin cases are flagged as cancer
@@ -1594,15 +1620,15 @@ FPR = FP / (FP + TN) = 73 / 807 = 0.0905  →  9.05%
 
 ### Metrics Summary — Skin Cancer
 
-| Metric | Value | Rating |
-|---|---|---|
-| Accuracy | **89.52%** | ✅ Good |
-| Precision | **69.07%** | ⚠️ Lower — due to class imbalance |
-| Recall (Sensitivity) | **83.59%** | ⚠️ Moderate |
-| Specificity | **90.95%** | ✅ Good |
-| F1 Score | **75.65%** | ⚠️ Moderate |
-| False Negative Rate | **16.41%** | ⚠️ Risk |
-| False Positive Rate | **9.05%** | ✅ Low |
+| Metric               | Value      | Rating                            |
+| -------------------- | ---------- | --------------------------------- |
+| Accuracy             | **89.52%** | ✅ Good                           |
+| Precision            | **69.07%** | ⚠️ Lower — due to class imbalance |
+| Recall (Sensitivity) | **83.59%** | ⚠️ Moderate                       |
+| Specificity          | **90.95%** | ✅ Good                           |
+| F1 Score             | **75.65%** | ⚠️ Moderate                       |
+| False Negative Rate  | **16.41%** | ⚠️ Risk                           |
+| False Positive Rate  | **9.05%**  | ✅ Low                            |
 
 > Lower precision is expected — the dataset has 80.5% non-cancer images, so the model sees far fewer cancer examples during training, making it harder to be precise when predicting cancer.
 
@@ -1644,24 +1670,24 @@ FPR = FP / (FP + TN) = 73 / 807 = 0.0905  →  9.05%
 
 ### Dataset Size Comparison
 
-| Dataset | Training | Testing | Total | Classes | Balance |
-|---|---|---|---|---|---|
-| Brain Cancer | 5,600 | 1,600 | **7,200** | 4 | ✅ Perfectly balanced |
-| Lung Cancer | 987 | 110 | **1,097** | 3 | ⚠️ Imbalanced |
-| Skin Cancer | 9,013 | 1,002 | **10,015** | 7 | ❌ Heavily imbalanced |
-| **Grand Total** | **15,600** | **2,712** | **18,312** | **14** | |
+| Dataset         | Training   | Testing   | Total      | Classes | Balance               |
+| --------------- | ---------- | --------- | ---------- | ------- | --------------------- |
+| Brain Cancer    | 5,600      | 1,600     | **7,200**  | 4       | ✅ Perfectly balanced |
+| Lung Cancer     | 987        | 110       | **1,097**  | 3       | ⚠️ Imbalanced         |
+| Skin Cancer     | 9,013      | 1,002     | **10,015** | 7       | ❌ Heavily imbalanced |
+| **Grand Total** | **15,600** | **2,712** | **18,312** | **14**  |                       |
 
 ### Metrics Comparison
 
-| Metric | Brain Cancer | Lung Cancer | Skin Cancer |
-|---|---|---|---|
-| Accuracy | **88.75%** | 86.36% | 89.52% |
-| Precision | **96.70%** | 88.68% | 69.07% |
-| Recall | **88.00%** | 83.93% | 83.59% |
-| F1 Score | **92.15%** | 86.22% | 75.65% |
-| FN Rate | **12.00%** | 16.07% | 16.41% |
-| FP Rate | **9.00%** | 11.11% | 9.05% |
-| Overall Verdict | ✅ Best | ⚠️ Good | ⚠️ Moderate |
+| Metric          | Brain Cancer | Lung Cancer | Skin Cancer |
+| --------------- | ------------ | ----------- | ----------- |
+| Accuracy        | **88.75%**   | 86.36%      | 89.52%      |
+| Precision       | **96.70%**   | 88.68%      | 69.07%      |
+| Recall          | **88.00%**   | 83.93%      | 83.59%      |
+| F1 Score        | **92.15%**   | 86.22%      | 75.65%      |
+| FN Rate         | **12.00%**   | 16.07%      | 16.41%      |
+| FP Rate         | **9.00%**    | 11.11%      | 9.05%       |
+| Overall Verdict | ✅ Best      | ⚠️ Good     | ⚠️ Moderate |
 
 ### Why Brain Cancer Performs Best
 

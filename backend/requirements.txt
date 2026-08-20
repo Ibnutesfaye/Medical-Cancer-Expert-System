@@ -50,7 +50,8 @@ httpx==0.28.1
 # MySQL + ORM (added for v2 production database)
 sqlalchemy==2.0.36
 pymysql==1.1.1
-cryptography==43.0.3
+# Flower 1.8 requires cryptography >=42.0.4,<43.0.0.
+cryptography==42.0.8
 passlib[bcrypt]==1.7.4
 
 # Evaluation metrics and visualization

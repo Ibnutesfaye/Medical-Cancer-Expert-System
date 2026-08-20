@@ -1,0 +1,50 @@
+{
+  "class_to_idx": {
+    "actinic_keratosis": 0,
+    "basal_cell_carcinoma": 1,
+    "benign_keratosis": 2,
+    "benign_lung": 3,
+    "dermatofibroma": 4,
+    "glioma_tumor": 5,
+    "malignant_lung_cancer": 6,
+    "melanocytic_nevi": 7,
+    "melanoma": 8,
+    "meningioma_tumor": 9,
+    "no_tumor": 10,
+    "normal_lung": 11,
+    "pituitary_tumor": 12,
+    "vascular_lesion": 13
+  },
+  "idx_to_class": {
+    "0": "actinic_keratosis",
+    "1": "basal_cell_carcinoma",
+    "2": "benign_keratosis",
+    "3": "benign_lung",
+    "4": "dermatofibroma",
+    "5": "glioma_tumor",
+    "6": "malignant_lung_cancer",
+    "7": "melanocytic_nevi",
+    "8": "melanoma",
+    "9": "meningioma_tumor",
+    "10": "no_tumor",
+    "11": "normal_lung",
+    "12": "pituitary_tumor",
+    "13": "vascular_lesion"
+  },
+  "cancer_labels": {
+    "actinic_keratosis": "cancer",
+    "basal_cell_carcinoma": "cancer",
+    "benign_keratosis": "non-cancer",
+    "benign_lung": "non-cancer",
+    "dermatofibroma": "non-cancer",
+    "glioma_tumor": "cancer",
+    "malignant_lung_cancer": "cancer",
+    "melanocytic_nevi": "non-cancer",
+    "melanoma": "cancer",
+    "meningioma_tumor": "cancer",
+    "no_tumor": "non-cancer",
+    "normal_lung": "non-cancer",
+    "pituitary_tumor": "cancer",
+    "vascular_lesion": "non-cancer"
+  }
+}

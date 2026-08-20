@@ -1,0 +1,152 @@
+name: Medical Cancer Expert System — CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Backend Tests ────────────────────────────────────────────────────────────
+  test-backend:
+    name: Backend Tests (Python 3.11)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install pytest pytest-timeout pytest-asyncio
+
+      - name: Run unit tests
+        run: |
+          cd backend
+          python -m pytest test_pdf_parser_unit.py \
+            test_text_chunker_unit.py \
+            -v --timeout=30
+        continue-on-error: false
+
+      - name: Syntax check new AI modules
+        run: |
+          python -c "
+          import ast, pathlib, sys
+          files = [
+            'backend/ai/concrete_ml/feature_extractor.py',
+            'backend/ai/concrete_ml/fhe_classifier.py',
+            'backend/ai/concrete_ml/fhe_server.py',
+            'backend/ai/explainability/gradcam.py',
+            'backend/ai/benchmark/benchmark_service.py',
+            'backend/rag/hybrid_search.py',
+            'backend/rag/safety_guardrails.py',
+            'backend/monitoring/metrics.py',
+            'backend/routes/encrypted_inference.py',
+            'backend/routes/benchmark.py',
+            'backend/routes/doctor.py',
+            'backend/main_v2.py',
+          ]
+          failed = []
+          for f in files:
+              try:
+                  ast.parse(pathlib.Path(f).read_text(encoding='utf-8'))
+              except SyntaxError as e:
+                  print(f'ERROR: {f}: {e}')
+                  failed.append(f)
+          if failed:
+              sys.exit(1)
+          print(f'All {len(files)} files OK')
+          "
+
+  # ── Frontend Build ───────────────────────────────────────────────────────────
+  build-frontend:
+    name: Frontend Build (Node 20)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: cd frontend && npm ci
+
+      - name: TypeScript check + Build
+        run: cd frontend && npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 7
+
+  # ── Docker Build ─────────────────────────────────────────────────────────────
+  docker-build:
+    name: Docker Build Check
+    runs-on: ubuntu-latest
+    needs: [test-backend, build-frontend]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/Dockerfile.backend
+          push: false
+          tags: medical-cancer-backend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/Dockerfile.frontend
+          push: false
+          tags: medical-cancer-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── Security Scan ────────────────────────────────────────────────────────────
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: [test-backend]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Bandit security scan
+        run: |
+          pip install bandit
+          bandit -r backend/ \
+            --exclude backend/venv,backend/brain\ cancer\ csv,backend/lung\ cancer\ csv,backend/skin\ cancer\ csv \
+            -ll -q || true
+        continue-on-error: true

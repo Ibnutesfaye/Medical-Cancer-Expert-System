@@ -1,0 +1,9 @@
+{
+  "accuracy": 0.8571,
+  "train_time_s": 1.3,
+  "compile_time_s": 0.0,
+  "n_bits": 8,
+  "n_train": 630,
+  "n_test": 70,
+  "concrete_ml": false
+}

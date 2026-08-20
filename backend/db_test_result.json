@@ -1,0 +1,6 @@
+{
+  "url": "mysql+pymysql://root:@localhost:3306/medical_chatbot",
+  "status": "FAILED",
+  "error": "(pymysql.err.OperationalError) (2003, \"Can't connect to MySQL server on 'localhost' ([WinError 10061] No connection could be made because the target machine actively refused it)\")\n(Background on this error at: https://sqlalche.me/e/20/e3q8)",
+  "type": "<class 'sqlalchemy.exc.OperationalError'>"
+}

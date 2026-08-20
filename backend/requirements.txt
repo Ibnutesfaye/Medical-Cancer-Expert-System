@@ -1,0 +1,80 @@
+# FastAPI and server
+fastapi==0.115.0
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+
+# LangChain for RAG orchestration
+langchain==0.3.13
+langchain-community==0.3.13
+
+# Embeddings and vector database
+sentence-transformers==3.3.1
+faiss-cpu==1.9.0.post1
+
+# PDF processing
+pypdf2==3.0.1
+pdfplumber==0.11.0
+
+# Authentication
+python-jose[cryptography]==3.3.0
+
+# LLM integrations
+groq==0.14.0
+openai==1.59.7
+
+# Tokenization
+tiktoken==0.8.0
+
+# NLP and Spelling Correction
+textblob==0.20.0
+nltk==3.9.4
+
+# Image analysis
+Pillow>=10.0.0
+transformers>=4.35.0
+torch>=2.0.0
+numpy>=1.24.0
+
+# Utilities
+pydantic==2.10.5
+pydantic-settings==2.7.1
+python-dotenv==1.0.1
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+hypothesis==6.122.4
+httpx==0.28.1
+
+# MySQL + ORM (added for v2 production database)
+sqlalchemy==2.0.36
+pymysql==1.1.1
+cryptography==43.0.3
+passlib[bcrypt]==1.7.4
+
+# Evaluation metrics and visualization
+scikit-learn==1.5.2
+seaborn==0.13.2
+matplotlib==3.9.2
+
+# Research platform (benchmark, Grad-CAM)
+psutil>=5.9.0
+opencv-python-headless>=4.8.0
+
+# Privacy-preserving inference (optional — sklearn fallback works without it)
+# concrete-ml==1.6.0
+
+# Hybrid RAG
+rank-bm25==0.2.2
+
+# Federated Learning
+flwr==1.8.0
+
+# Differential Privacy
+opacus==1.4.0
+
+# Prometheus monitoring
+prometheus-client==0.20.0
+
+# System metrics for benchmark
+psutil==5.9.8

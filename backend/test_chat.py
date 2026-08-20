@@ -6,7 +6,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # We need a valid token. Let's just login first.
-res = requests.post("http://localhost:8000/auth/login", json={"username": "admin", "password": "admin123"})
+res = requests.post(
+    "http://localhost:8000/auth/login",
+    json={
+        "username": os.getenv("ADMIN_USERNAME", "admin"),
+        "password": os.environ["ADMIN_PASSWORD"],
+    },
+    timeout=10,
+)
 if not res.ok:
     print(f"Login failed: {res.status_code} {res.text}")
     exit(1)

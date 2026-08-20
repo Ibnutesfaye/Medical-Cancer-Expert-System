@@ -150,9 +150,6 @@ jobs:
       - name: Run Bandit security scan
         run: |
           python -m pip install bandit==1.8.6
-          # B301/B614 are expected for repository-controlled persisted FAISS/sklearn
-          # data and the committed PyTorch model. Continue scanning all other issues.
           bandit -r backend/ \
             --exclude backend/venv,backend/brain\ cancer\ csv,backend/lung\ cancer\ csv,backend/skin\ cancer\ csv \
-            --skip B301,B614 \
             -ll -q

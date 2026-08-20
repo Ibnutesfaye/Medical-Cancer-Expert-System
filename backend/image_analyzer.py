@@ -145,7 +145,9 @@ class _TrainedPredictor:
     """Uses the fine-tuned ResNet18 saved by train_model.py."""
 
     def __init__(self):
-        checkpoint = torch.load(MODEL_PATH, map_location="cpu", weights_only=False)
+        # The checkpoint contains tensors and primitive metadata only. Restricting
+        # unpickling prevents arbitrary Python objects from being constructed.
+        checkpoint = torch.load(MODEL_PATH, map_location="cpu", weights_only=True)
         num_classes = checkpoint["num_classes"]
         self.class_to_idx: dict[str, int] = checkpoint["class_to_idx"]
         self.idx_to_class: dict[int, str] = {v: k for k, v in self.class_to_idx.items()}

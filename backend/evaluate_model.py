@@ -182,7 +182,7 @@ def evaluate():
         return
 
     print_section("Loading Model")
-    checkpoint   = torch.load(MODEL_PATH, map_location="cpu", weights_only=False)
+    checkpoint   = torch.load(MODEL_PATH, map_location="cpu", weights_only=True)
     num_classes  = checkpoint["num_classes"]
     class_to_idx = checkpoint["class_to_idx"]
     idx_to_class = {v: k for k, v in class_to_idx.items()}

@@ -224,4 +224,6 @@ if os.path.isdir(_dist):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main_v2:app", host="0.0.0.0", port=8000, reload=False)
+    # Intentional for the container/server entry point; network access is
+    # restricted by the deployment firewall/reverse proxy.
+    uvicorn.run("main_v2:app", host="0.0.0.0", port=8000, reload=False)  # nosec B104

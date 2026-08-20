@@ -46,7 +46,9 @@ class VectorDatabase:
             # Load existing
             self.index = faiss.read_index(str(self.index_path))
             with open(self.metadata_path, 'rb') as f:
-                self.metadata_store = pickle.load(f)
+                # The persistence directory is operator-controlled application
+                # state; users cannot supply this file through an API request.
+                self.metadata_store = pickle.load(f)  # nosec B301
         else:
             # Create new index (L2 distance, will convert to cosine similarity)
             self.index = faiss.IndexFlatIP(self.dimension)  # Inner product for cosine

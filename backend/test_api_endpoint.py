@@ -2,8 +2,10 @@
 
 import requests
 import json
+import os
 
 API_URL = "http://localhost:8000"
+REQUEST_TIMEOUT = 30
 
 def test_chat():
     print("=== Testing Chat API Endpoint ===\n")
@@ -12,7 +14,11 @@ def test_chat():
     print("1. Logging in...")
     login_response = requests.post(
         f"{API_URL}/auth/login",
-        json={"username": "admin", "password": "admin"}
+        json={
+            "username": os.getenv("ADMIN_USERNAME", "admin"),
+            "password": os.environ["ADMIN_PASSWORD"],
+        },
+        timeout=REQUEST_TIMEOUT,
     )
     
     if login_response.status_code != 200:
@@ -36,7 +42,8 @@ def test_chat():
             "query": query,
             "conversation_history": []
         },
-        stream=True
+        stream=True,
+        timeout=REQUEST_TIMEOUT,
     )
     
     if response.status_code != 200:

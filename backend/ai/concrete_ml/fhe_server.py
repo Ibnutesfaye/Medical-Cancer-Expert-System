@@ -64,7 +64,9 @@ class FHEInferenceServer:
             sklearn_path = MODEL_DIR / "sklearn_classifier.pkl"
             if sklearn_path.exists():
                 with open(sklearn_path, "rb") as f:
-                    self._sklearn_model = pickle.load(f)
+                    # This fallback is a versioned, repository-controlled model,
+                    # never an uploaded or request-provided pickle.
+                    self._sklearn_model = pickle.load(f)  # nosec B301
                 print("  [FHEServer] Using sklearn fallback ✓")
             else:
                 print("  [FHEServer] No model found — run fhe_classifier.py first")

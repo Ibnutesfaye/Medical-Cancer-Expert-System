@@ -877,7 +877,7 @@ Backend is now running at **http://localhost:8000** To verify it's healthy, open
 
 bash
 
-## cd fronten
+## cd frontend
 
 npm run dev
 

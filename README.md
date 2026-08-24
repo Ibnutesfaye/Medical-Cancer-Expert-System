@@ -889,7 +889,7 @@ VITE ready in Xms
 
 ## Model Evaluation — Confusion Matrix & Classification Metrics
 
-### Definition
+### Definitions
 
 | Term           | Symbol | Meaning                                                           |
 | -------------- | ------ | ----------------------------------------------------------------- |

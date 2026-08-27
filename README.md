@@ -887,7 +887,7 @@ VITE ready in Xms
 
 ---
 
-## Model Evaluation — Confusion Matrix & Classification Metric
+## Model Evaluation — Confusion Matrix & Classification Metrics
 
 ### Definitions
 
